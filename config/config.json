@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "box-tiles-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/boxTiles/BoxTilesWebPart.js",
+          "manifest": "./src/webparts/boxTiles/BoxTilesWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "BoxTilesWebPartStrings": "lib/webparts/boxTiles/loc/{locale}.js",
+    "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+  }
+}
