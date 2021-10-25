@@ -46,6 +46,10 @@ Version|Date|Comments
 - Ensure that you are at the solution folder
 - in the command-line run:
   - **npm install**
+
+  - npm install @mikezimm/npmfunctions@1.0.114
+  - npm install @pnp/spfx-property-controls --save --save-exact
+
   - **gulp serve**
 
 > Include any additional steps as needed.

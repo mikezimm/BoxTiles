@@ -1,6 +1,6 @@
 {
   "name": "box-tiles",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "main": "lib/index.js",
   "engines": {
@@ -17,7 +17,8 @@
     "@microsoft/sp-office-ui-fabric-core": "1.11.0",
     "@microsoft/sp-property-pane": "1.11.0",
     "@microsoft/sp-webpart-base": "1.11.0",
-    "@mikezimm/npmfunctions": "^1.0.114",
+    "@mikezimm/npmfunctions": "^1.0.115",
+    "@pnp/spfx-property-controls": "3.2.0",
     "office-ui-fabric-react": "6.214.0",
     "react": "16.8.5",
     "react-dom": "16.8.5"

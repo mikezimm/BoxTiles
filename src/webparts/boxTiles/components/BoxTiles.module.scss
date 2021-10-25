@@ -1,5 +1,12 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
+.boxErrors {
+  background: yellow;
+  font-size: larger;
+  text-align: center;
+  padding: 70px 0px;
+}
+
 .boxTiles {
   background: 'GreenYellow';
   height: 100%;
@@ -10,7 +17,7 @@
   flex-wrap: wrap;
 
 }
-
+//
 .tileBox {
   // height: 100%;
   min-height: 100px;
@@ -55,7 +62,6 @@
     overflow: 'hidden';
     text-overflow: 'ellipsis';
 
-    
   }
 
 }

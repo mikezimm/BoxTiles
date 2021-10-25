@@ -19,9 +19,24 @@ import { IImageFit, IImageCover, IImageTarget, IImageZoom } from '@mikezimm/npmf
 
 import { IPivotTileItemProps } from '../IPivotTileItemProps';
 
+/**
+ * react style props added into the styles for these elements
+ */
+export interface IBoxStyles {
+  boxTiles: any;
+  flexBoxes: any;
+  tileBox: any;
+  boxLinks: any;
+  imageDiv: any;
+  minWidth: number;  //min width of a tile box
+  maxWidth: number;  //max width of a tile box
+}
+
 export interface IBoxTilesProps {
   description: string;
   items: IPivotTileItemProps[];
+  boxStyles: IBoxStyles;
+  errMessage: any;
 
 }
 
@@ -50,6 +65,8 @@ export interface IBoxObject {
   imgSize: string;
 
   items: IBoxLink[];
+
+  propsLocked: boolean;  //true if it was created/updated with an item that was designated as the BoxTilesSettings for category
 
 }
 

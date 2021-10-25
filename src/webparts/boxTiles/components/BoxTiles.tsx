@@ -21,7 +21,10 @@ import { sampleTenant, sampleSite, sampleCust } from './MockInfo';
  *                                                                                                                                 
  */
 
+import { IPivotTileItemProps } from '../IPivotTileItemProps';
+
 import { imageOptionsGroup, } from '@mikezimm/npmfunctions/dist/Services/PropPane/ReactImageOptions';
+import { getHelpfullErrorV2, } from '@mikezimm/npmfunctions/dist/Services/Logging/ErrorHandler';
 
 export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
 
@@ -36,6 +39,93 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
     str = str.replace(replace3,sampleCust );
     return str;
   }
+
+  /**
+   * This just determines if the item contains info that should be forced into the BoxObject and locked.
+   * @param item 
+   */
+  private propsLocked( item: IPivotTileItemProps ): boolean {
+    let propsLocked: boolean = false;
+    if ( item.title.toLocaleLowerCase().indexOf('BoxStyleSetting')){
+      propsLocked = true;
+    } else if ( item.description.toLocaleLowerCase().indexOf('BoxStyleSetting')){
+      propsLocked = true;
+    }
+    return propsLocked;
+  }
+
+  private createBoxProps ( thisCategory: string, item: IPivotTileItemProps ): IBoxObject {
+
+    let setImgFit: any = item.setImgFit;
+    let setImgCover: any = item.setImgCover;
+
+    let itemLocksProps: boolean = this.propsLocked( item );
+
+    let boxObject:  IBoxObject = {
+      onHoverZoom: item.onHoverZoom,
+      imageUrl: this.cleanTitles(item.imageUrl),
+      setSize: item.setSize,
+      setRatio: item.setRatio,
+      setImgFit: setImgFit,
+      setImgCover: setImgCover,
+      // target: item.target,
+    
+      // //Custom image properties
+      imageWidth: item.imageWidth,
+      imageMaxWidth: item.imageMaxWidth,
+      imageHeight: item.imageHeight,
+      textPadding: item.textPadding,
+    
+      //Mostly come from column values
+    
+      category: thisCategory,
+      
+      // options: string;
+      color: item.color,
+      imgSize: item.imgSize,
+    
+      items: [],
+      propsLocked: itemLocksProps,
+
+    };
+    return boxObject;
+  }
+  
+
+  private updateBoxProps ( boxObject: IBoxObject, item: IPivotTileItemProps ) : IBoxObject {
+
+    if ( boxObject.propsLocked === true ) { return boxObject ; }
+
+    //See if this item will lock the props.  If so, set all props to this one's
+    let itemLocksProps: boolean = this.propsLocked( item );
+
+    let setImgFit: any = item.setImgFit;
+    let setImgCover: any = item.setImgCover;
+
+    let updateTheseProps: string[] = ['onHoverZoom','setSize','setRatio','imageWidth','imageMaxWidth','imageHeight','textPadding','color','imgSize'];
+
+    updateTheseProps.map( key => {
+      //Do update if this one locks them... replace everything.  Else if the current value is null, undefined or blank do update.
+      let forceUpdate = itemLocksProps === true || boxObject[ key ] === null || boxObject[ key ] === undefined ? true : false;
+      if ( forceUpdate === true ) { boxObject[ key ] = item[ key ] ; }
+
+    });
+
+    let cleanTheseProps: string[] = [ 'imageUrl','title','description','href' ];
+
+    if ( itemLocksProps === true ) {
+      cleanTheseProps.map( key => {
+      //Do update if this one locks them... replace everything.  Else if the current value is null, undefined or blank do update.
+      let forceUpdate = itemLocksProps === true || boxObject[ key ] === null || boxObject[ key ] === undefined ? true : false;
+      if ( forceUpdate === true ) { boxObject[ key ] = this.cleanTitles(item[ key ]) ; }
+      });
+    }
+
+    //'imageUrl',
+
+    return boxObject;
+
+  }
   
   public render(): React.ReactElement<IBoxTilesProps> {
     console.log('Component Props: ', this.props );
@@ -43,122 +133,120 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
     let boxes = [];
     let boxObjects : IBoxObject[] = [];
 
-    //create boxObjects
-    this.props.items.map ( item => {
-      item.category.map( category => {
-        let thisCategory = this.cleanTitles(category);
-        if ( boxes.indexOf( thisCategory ) < 0 ) { 
-          boxes.push( thisCategory ) ;
-          let setImgFit: any = item.setImgFit;
-          let setImgCover: any = item.setImgCover;
+    if ( this.props.errMessage && this.props.errMessage !== '' ) {
 
-          boxObjects.push( {
-            onHoverZoom: item.onHoverZoom,
-            imageUrl: this.cleanTitles(item.imageUrl),
-            setSize: item.setSize,
-            setRatio: item.setRatio,
-            setImgFit: setImgFit,
-            setImgCover: setImgCover,
-            // target: item.target,
-          
-            // //Custom image properties
-            imageWidth: item.imageWidth,
-            imageMaxWidth: item.imageMaxWidth,
-            imageHeight: item.imageHeight,
-            textPadding: item.textPadding,
-          
-            //Mostly come from column values
-          
-            category:thisCategory,
-            
-            // options: string;
-            color: item.color,
-            imgSize: item.imgSize,
-          
-            items: [],
-          });
-        
-        }
-      });
-    });
-    
-    //This section makes the links in each box
-    this.props.items.map ( item => {
-      let target: any = item.target;
-      let thisLink : IBoxLink = {
-        description: this.cleanTitles(item.description),
-        target: target,
-
-        title: this.cleanTitles(item.title),
-        href: this.cleanTitles(item.href),
-        Id: item.id,
-
-        color: item.color,
-      };
-
-      item.category.map( category => {
-        let thisCategory = this.cleanTitles(category);
-        let idx = boxes.indexOf( thisCategory );
-        boxObjects[ idx ].items.push( thisLink );
-
-      });
-    });
-
-    console.log( 'BoxTiles boxObjects:', boxObjects );
-
-    return (
-      <div className={ spfxStyles.boxTiles }>
-        <div className={ spfxStyles.container }>
-          {/* <div className={ spfxStyles.row }>
-            <div className={ spfxStyles.column }> */}
-              {/* <span className={ spfxStyles.title }>Welcome to SharePoint??</span>
-              <p className={ spfxStyles.subTitle }>Customize SharePoint experiences using Web Parts.</p>
-              <p className={ spfxStyles.description }>{escape(this.props.description)}</p>
-              <a href="https://aka.ms/spfx" className={ spfxStyles.button }>
-                <span className={ spfxStyles.label }>Learn more</span>
-              </a> */}
-
-              <div className= { boxStyles.boxTiles }>
-                <div className= { boxStyles.flexBoxes }>
-                  { boxObjects.map( box => {
-
-                    let boxLinks = box.items.map( link => {
-                      return <li>
-                        <a href={link.href} title={ link.title } target={ link.target }
-                          >{ link.title }</a>
-                      </li>;
-                    });
-
-                    // let sizeStyle = { height: box.imageHeight / 2, top: box.imageHeight / 3.4 } ;
-                    // let sizeStyle: React.CSSProperties = {root: { width: '175px', height: '100px' } } ;
-                    let boxDiv = <div className ={ boxStyles.tileBox }>
-                      { <h2>{ box.category }</h2> }
-                      <div style={{ height: '125px', paddingBottom: '20px' }}>
-                        { <Image 
-                          maximizeFrame={ true }
-                          // className={[
-                          //   styles.pTileItemImageCustom, styles.themeBackground,
-                          //   ( this.state.hovering === true  ? this.iHoverZoomStyle : styles.imgHoverZoom )
-                          // ].join(" ")} 
-                          src={ box.imageUrl } 
-                          shouldFadeIn={true} 
-                          imageFit={imageOptionsGroup.getImgFit(box.setImgFit)}
-                          coverStyle={imageOptionsGroup.getImgCover(box.setImgCover)}      
-                        />
-                        }
-                      </div>
-                      { <ul className={ boxStyles.boxLinks } > { boxLinks }  </ul> }
-                    </div>;
-
-                    return boxDiv;
-
-                  })}
-                </div>
-              </div>
-            {/* </div>
-          </div> */}
+      return (
+        <div className={ spfxStyles.boxTiles } style={ this.props.boxStyles.boxTiles }>
+        <div className={ boxStyles.boxErrors }>
+          { this.props.errMessage }
         </div>
       </div>
-    );
+      );
+
+    } else {
+      //create boxObjects
+      this.props.items.map ( item => {
+        item.category.map( category => {
+
+          let thisCategory = this.cleanTitles(category);
+          if ( boxes.indexOf( thisCategory ) < 0 ) { 
+            boxes.push( thisCategory ) ;
+            boxObjects.push( this.createBoxProps( thisCategory, item ) );
+
+          } else {
+            let boxIdx = boxes.indexOf( thisCategory );
+            boxObjects[ boxIdx ] = this.updateBoxProps( boxObjects[ boxIdx ], item );
+
+          }
+        });
+      });
+      
+      //This section makes the links in each box
+      this.props.items.map ( item => {
+        let target: any = item.target;
+        let thisLink : IBoxLink = {
+          description: this.cleanTitles(item.description),
+          target: target,
+
+          title: this.cleanTitles(item.title),
+          href: this.cleanTitles(item.href),
+          Id: item.id,
+
+          color: item.color,
+        };
+
+        item.category.map( category => {
+          let thisCategory = this.cleanTitles(category);
+          let idx = boxes.indexOf( thisCategory );
+          boxObjects[ idx ].items.push( thisLink );
+
+        });
+      });
+
+      console.log( 'BoxTiles boxObjects:', boxObjects );
+
+      return (
+        <div className={ spfxStyles.boxTiles }>
+          <div className={ spfxStyles.container }>
+            {/* <div className={ spfxStyles.row }>
+              <div className={ spfxStyles.column }> */}
+                {/* <span className={ spfxStyles.title }>Welcome to SharePoint??</span>
+                <p className={ spfxStyles.subTitle }>Customize SharePoint experiences using Web Parts.</p>
+                <p className={ spfxStyles.description }>{escape(this.props.description)}</p>
+                <a href="https://aka.ms/spfx" className={ spfxStyles.button }>
+                  <span className={ spfxStyles.label }>Learn more</span>
+                </a> */}
+                <div className= { boxStyles.boxTiles } style={ this.props.boxStyles.boxTiles }>
+
+                  <div className= { boxStyles.flexBoxes } style={ this.props.boxStyles.flexBoxes }>
+                    { boxObjects.map( box => {
+
+                      let boxLinks = box.items.map( link => {
+                        return <li style={ this.props.boxStyles.boxLinks }>
+                          <a href={link.href} title={ link.title } target={ link.target }
+                            >{ link.title }</a>
+                        </li>;
+                      });
+
+                      // let sizeStyle = { height: box.imageHeight / 2, top: box.imageHeight / 3.4 } ;
+                      // let sizeStyle: React.CSSProperties = {root: { width: '175px', height: '100px' } } ;
+                      let tileBoxStyles: React.CSSProperties = this.props.boxStyles.tileBox ? this.props.boxStyles.tileBox : {};
+                      tileBoxStyles.minWidth = this.props.boxStyles.minWidth;
+                      tileBoxStyles.maxWidth = this.props.boxStyles.maxWidth;
+
+                      //height: '125px', paddingBottom: '20px'
+                      let imageDiv : React.CSSProperties = this.props.boxStyles.imageDiv ? 
+                        this.props.boxStyles.imageDiv : {  };
+
+                      if ( !imageDiv.height || imageDiv.height < 10 ) { imageDiv.height = '125px' ; }
+                      if ( !imageDiv.paddingBottom || imageDiv.paddingBottom < 10 ) { imageDiv.paddingBottom = '20px' ; }
+
+                      let boxDiv = <div className ={ boxStyles.tileBox } style={ tileBoxStyles }>
+                        { <h2>{ box.category }</h2> }
+                        <div style={ imageDiv }>
+                          { <Image 
+                            maximizeFrame={ true }
+                            src={ box.imageUrl } 
+                            shouldFadeIn={true} 
+                            imageFit={imageOptionsGroup.getImgFit(box.setImgFit)}
+                            coverStyle={imageOptionsGroup.getImgCover(box.setImgCover)}      
+                          />
+                          }
+                        </div>
+                        { <ul className={ boxStyles.boxLinks } > { boxLinks }  </ul> }
+                      </div>;
+
+                      return boxDiv;
+
+                    })}
+                  </div>
+                </div>
+              {/* </div>
+            </div> */}
+          </div>
+        </div>
+      );
+    }
+
   }
 }

@@ -3,7 +3,7 @@
   "solution": {
     "name": "box-tiles-client-side-solution",
     "id": "cb9cd751-c1d5-46a1-9395-52eb22bfa6e9",
-    "version": "1.0.0.0",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {
