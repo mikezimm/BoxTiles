@@ -24,7 +24,9 @@ export interface IBoxTilesWebPartProps {
   tileBox: string;
   imageDiv: any;
   minWidth: number;  //min width of a tile box
-  maxWidth: number;  //max width of a tile box
+  maxWidth: number;  //min width of a tile box
+  imageHeight: number;  //height of actual image.  Width = 100%
+
 }
 
 
@@ -41,6 +43,7 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
       boxTiles: null,
       flexBoxes: null,
       tileBox: null,
+      imageHeight: this.properties.imageHeight ? this.properties.imageHeight : 125,
       imageDiv: null,
       minWidth: this.properties.minWidth ? this.properties.minWidth : 120,
       maxWidth: this.properties.maxWidth ? this.properties.maxWidth : 180,
@@ -87,6 +90,7 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
 
     let allProps: any[] = makePropDataText( ['description', 'boxLinks', 'boxTiles', 'flexBoxes', 'tileBox', 'imageDiv'], [], '', false );
+    allProps = makePropDataSliders( ['imageHeight',], allProps, 75, 300, 5, false );
     allProps = makePropDataSliders( ['minWidth','maxWidth'], allProps, 120, 600, 10, false );
 
     return {

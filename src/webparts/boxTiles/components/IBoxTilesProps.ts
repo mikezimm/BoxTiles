@@ -28,8 +28,14 @@ export interface IBoxStyles {
   tileBox: any;
   boxLinks: any;
   imageDiv: any;
+  imageHeight: number;  //imageHeight:  this applies to the <Image react component, not the parent div that imageDiv applies to
+
   minWidth: number;  //min width of a tile box
   maxWidth: number;  //max width of a tile box
+
+  setImgFit?: IImageFit;
+  setImgCover?: IImageCover;
+  onHoverZoom?: string;
 }
 
 export interface IBoxTilesProps {
@@ -41,30 +47,11 @@ export interface IBoxTilesProps {
 }
 
 export interface IBoxObject {
-    // //Image & main tile properties
   imageUrl: string;
-  onHoverZoom?: string;
-  setSize?: string;
-  setRatio?: string;
-  setImgFit?: IImageFit;
-  setImgCover?: IImageCover;
-  // target: string;
-
-  // //Custom image properties
-  imageWidth?: number;
-  imageMaxWidth?: number;
-  imageHeight?: number;
-  textPadding?: number;
-
-  //Mostly come from column values
-
   category:string;
-  
-  // options: string;
   color: string;
-  imgSize: string;
-
   items: IBoxLink[];
+  href?: string;
 
   propsLocked: boolean;  //true if it was created/updated with an item that was designated as the BoxTilesSettings for category
 
@@ -75,78 +62,17 @@ export interface IBoxLink {
   //Main webpart properties
   description: string;
 
-  // //Image & main tile properties
-  // onHoverZoom: string;
-  // setSize: string;
-  // setRatio: string;
-  // setImgFit: string;
-  // setImgCover: string;
   target: IImageTarget;
 
-  // //Custom image properties
-  // imageWidth: number;
-  // imageMaxWidth: number;
-  // imageHeight: number;
-  // textPadding: number;
-
-  //Mostly come from column values
-  // imageUrl: string;
   title: string;
   href: string;
-  // category:string[];
+  
   Id: string;
   
   // options: string;
   color: string;
-  // imgSize: string;
-  
-  // parentCat?:string;
 
   FileRef?: string;
 
-  // OData__OriginalSourceUrl?: string;
-  // OData__UIVersionString?: string;
-  // FileSystemObjectType?: number;
-
 }
 
-
-export interface IFullBoxLink {
-  
-  //Main webpart properties
-  description: string;
-
-  //Image & main tile properties
-  onHoverZoom: string;
-  setSize: string;
-  setRatio: string;
-  setImgFit: string;
-  setImgCover: string;
-  target: string;
-
-  //Custom image properties
-  imageWidth: number;
-  imageMaxWidth: number;
-  imageHeight: number;
-  textPadding: number;
-
-  //Mostly come from column values
-  imageUrl: string;
-  title: string;
-  href: string;
-  category:string[];
-  Id: string;
-  
-  options: string;
-  color: string;
-  imgSize: string;
-  
-  parentCat?:string;
-
-  FileRef?: string;
-
-  OData__OriginalSourceUrl?: string;
-  OData__UIVersionString?: string;
-  FileSystemObjectType?: number;
-
-}

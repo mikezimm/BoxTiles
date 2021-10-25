@@ -28,6 +28,9 @@ import { getHelpfullErrorV2, } from '@mikezimm/npmfunctions/dist/Services/Loggin
 
 export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
 
+  private setImgFit: any = this.props.boxStyles.setImgFit;
+  private setImgCover: any = this.props.boxStyles.setImgFit;
+
   private cleanTitles( str: string ) {
     let replace1 = new RegExp( 'sampleSite', 'g');
     // let replace1 = new RegExp( '\${sampleSite}', 'g');
@@ -46,9 +49,9 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
    */
   private propsLocked( item: IPivotTileItemProps ): boolean {
     let propsLocked: boolean = false;
-    if ( item.title.toLocaleLowerCase().indexOf('BoxStyleSetting')){
+    if ( item.title.toLocaleLowerCase().indexOf('BoxStyleSetting'.toLowerCase() ) ){
       propsLocked = true;
-    } else if ( item.description.toLocaleLowerCase().indexOf('BoxStyleSetting')){
+    } else if ( item.description.toLocaleLowerCase().indexOf('BoxStyleSetting'.toLowerCase() ) ){
       propsLocked = true;
     }
     return propsLocked;
@@ -56,34 +59,15 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
 
   private createBoxProps ( thisCategory: string, item: IPivotTileItemProps ): IBoxObject {
 
-    let setImgFit: any = item.setImgFit;
-    let setImgCover: any = item.setImgCover;
-
     let itemLocksProps: boolean = this.propsLocked( item );
 
     let boxObject:  IBoxObject = {
-      onHoverZoom: item.onHoverZoom,
+
       imageUrl: this.cleanTitles(item.imageUrl),
-      setSize: item.setSize,
-      setRatio: item.setRatio,
-      setImgFit: setImgFit,
-      setImgCover: setImgCover,
-      // target: item.target,
-    
-      // //Custom image properties
-      imageWidth: item.imageWidth,
-      imageMaxWidth: item.imageMaxWidth,
-      imageHeight: item.imageHeight,
-      textPadding: item.textPadding,
-    
-      //Mostly come from column values
     
       category: thisCategory,
-      
-      // options: string;
       color: item.color,
-      imgSize: item.imgSize,
-    
+
       items: [],
       propsLocked: itemLocksProps,
 
@@ -99,10 +83,7 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
     //See if this item will lock the props.  If so, set all props to this one's
     let itemLocksProps: boolean = this.propsLocked( item );
 
-    let setImgFit: any = item.setImgFit;
-    let setImgCover: any = item.setImgCover;
-
-    let updateTheseProps: string[] = ['onHoverZoom','setSize','setRatio','imageWidth','imageMaxWidth','imageHeight','textPadding','color','imgSize'];
+    let updateTheseProps: string[] = ['color'];
 
     updateTheseProps.map( key => {
       //Do update if this one locks them... replace everything.  Else if the current value is null, undefined or blank do update.
@@ -218,7 +199,11 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
                       let imageDiv : React.CSSProperties = this.props.boxStyles.imageDiv ? 
                         this.props.boxStyles.imageDiv : {  };
 
-                      if ( !imageDiv.height || imageDiv.height < 10 ) { imageDiv.height = '125px' ; }
+                      if ( !imageDiv.height || imageDiv.height < 10 ) { imageDiv.height = 125 ; }
+
+                      if ( this.props.boxStyles.imageHeight && this.props.boxStyles.imageHeight > 25 ) { 
+                        imageDiv.height = this.props.boxStyles.imageHeight ; }
+
                       if ( !imageDiv.paddingBottom || imageDiv.paddingBottom < 10 ) { imageDiv.paddingBottom = '20px' ; }
 
                       let boxDiv = <div className ={ boxStyles.tileBox } style={ tileBoxStyles }>
@@ -228,8 +213,8 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
                             maximizeFrame={ true }
                             src={ box.imageUrl } 
                             shouldFadeIn={true} 
-                            imageFit={imageOptionsGroup.getImgFit(box.setImgFit)}
-                            coverStyle={imageOptionsGroup.getImgCover(box.setImgCover)}      
+                            imageFit={imageOptionsGroup.getImgFit( this.setImgFit )}
+                            coverStyle={imageOptionsGroup.getImgCover( this.setImgCover )}      
                           />
                           }
                         </div>
