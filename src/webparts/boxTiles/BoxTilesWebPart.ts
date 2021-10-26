@@ -91,7 +91,8 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
 
     let allProps: any[] = makePropDataText( ['description', 'boxLinks', 'boxTiles', 'flexBoxes', 'tileBox', 'imageDiv'], [], '', false );
     allProps = makePropDataSliders( ['imageHeight',], allProps, 75, 300, 5, false );
-    allProps = makePropDataSliders( ['minWidth','maxWidth'], allProps, 120, 600, 10, false );
+    allProps = makePropDataSliders( ['minWidth',], allProps, 120, 300, 10, false );
+    allProps = makePropDataSliders( ['maxWidth',], allProps, 120, 600, 10, false );
 
     return {
       pages: [
