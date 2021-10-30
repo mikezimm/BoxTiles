@@ -192,17 +192,17 @@ export default class BoxTiles extends React.Component<IBoxTilesProps, {}> {
                       // let sizeStyle = { height: box.imageHeight / 2, top: box.imageHeight / 3.4 } ;
                       // let sizeStyle: React.CSSProperties = {root: { width: '175px', height: '100px' } } ;
                       let tileBoxStyles: React.CSSProperties = this.props.boxStyles.tileBox ? this.props.boxStyles.tileBox : {};
-                      tileBoxStyles.minWidth = this.props.boxStyles.minWidth;
-                      tileBoxStyles.maxWidth = this.props.boxStyles.maxWidth;
+                      tileBoxStyles.minWidth = this.props.boxStyles.boxMinWidth;
+                      tileBoxStyles.maxWidth = this.props.boxStyles.boxMaxWidth;
 
                       //height: '125px', paddingBottom: '20px'
-                      let imageDiv : React.CSSProperties = this.props.boxStyles.imageDiv ? 
-                        this.props.boxStyles.imageDiv : {  };
+                      let imageDiv : React.CSSProperties = this.props.boxStyles.boxImageDiv ? 
+                        this.props.boxStyles.boxImageDiv : {  };
 
                       if ( !imageDiv.height || imageDiv.height < 10 ) { imageDiv.height = 125 ; }
 
-                      if ( this.props.boxStyles.imageHeight && this.props.boxStyles.imageHeight > 25 ) { 
-                        imageDiv.height = this.props.boxStyles.imageHeight ; }
+                      if ( this.props.boxStyles.boxImageHeight && this.props.boxStyles.boxImageHeight > 25 ) { 
+                        imageDiv.height = this.props.boxStyles.boxImageHeight ; }
 
                       if ( !imageDiv.paddingBottom || imageDiv.paddingBottom < 10 ) { imageDiv.paddingBottom = '20px' ; }
 

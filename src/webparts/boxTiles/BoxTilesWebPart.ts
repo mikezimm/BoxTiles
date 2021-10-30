@@ -22,10 +22,10 @@ export interface IBoxTilesWebPartProps {
   boxTiles: string;
   flexBoxes: string;
   tileBox: string;
-  imageDiv: any;
-  minWidth: number;  //min width of a tile box
-  maxWidth: number;  //min width of a tile box
-  imageHeight: number;  //height of actual image.  Width = 100%
+  boxImageDiv: any;
+  boxMinWidth: number;  //min width of a tile box
+  boxMaxWidth: number;  //min width of a tile box
+  boxImageHeight: number;  //height of actual image.  Width = 100%
 
 }
 
@@ -43,11 +43,22 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
       boxTiles: null,
       flexBoxes: null,
       tileBox: null,
-      imageHeight: this.properties.imageHeight ? this.properties.imageHeight : 125,
-      imageDiv: null,
-      minWidth: this.properties.minWidth ? this.properties.minWidth : 120,
-      maxWidth: this.properties.maxWidth ? this.properties.maxWidth : 180,
+      boxImageHeight: this.properties.boxImageHeight ? this.properties.boxImageHeight : 125,
+      boxImageDiv: null,
+      boxMinWidth: this.properties.boxMinWidth ? this.properties.boxMinWidth : 120,
+      boxMaxWidth: this.properties.boxMaxWidth ? this.properties.boxMaxWidth : 180,
     };
+
+    // Object.keys( boxStyles ).map( key => {
+
+    //   let braced = addCurleyBraces( key, this.properties[ key ] );
+    //   if ( braced.parsed && braced.errMessage === '' ) {
+    //     boxStyles [ key ] = braced.parsed; 
+    //     this.properties[ key ] = braced.value; 
+
+    //   } else { errMessage = braced.errMessage; }
+
+    // });
 
     Object.keys( boxStyles ).map( key => {
       try {
@@ -59,10 +70,10 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
       } catch(e){
         // errMessage = getHelpfullErrorV2( e, true, true, null ); //'BoxTilesWebpart.ts ~ boxStyles.' + key
         errMessage = `${key} property is not correct JSON format - React.CSSProperties type but without outer { "background":"red" }`;
-
   
       }
     });
+
 
     const anySampleData: any[] = sampleData;
     console.log('raw untouched sample Data: ', anySampleData );
@@ -89,10 +100,10 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
 
-    let allProps: any[] = makePropDataText( ['description', 'boxLinks', 'boxTiles', 'flexBoxes', 'tileBox', 'imageDiv'], [], '', false );
-    allProps = makePropDataSliders( ['imageHeight',], allProps, 75, 300, 5, false );
-    allProps = makePropDataSliders( ['minWidth',], allProps, 120, 300, 10, false );
-    allProps = makePropDataSliders( ['maxWidth',], allProps, 120, 600, 10, false );
+    let boxProps: any[] = makePropDataText( ['description', 'boxLinks', 'boxTiles', 'flexBoxes', 'tileBox', 'boxImageDiv'], [], '', false );
+    boxProps = makePropDataSliders( ['boxImageHeight',], boxProps, 75, 300, 5, false );
+    boxProps = makePropDataSliders( ['boxMinWidth',], boxProps, 120, 300, 10, false );
+    boxProps = makePropDataSliders( ['boxMaxWidth',], boxProps, 120, 600, 10, false );
 
     return {
       pages: [
@@ -103,7 +114,7 @@ export default class BoxTilesWebPart extends BaseClientSideWebPart<IBoxTilesWebP
           groups: [
             {
               groupName: strings.BasicGroupName,
-              groupFields: allProps
+              groupFields: boxProps
             }
           ]
         }

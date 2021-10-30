@@ -27,11 +27,11 @@ export interface IBoxStyles {
   flexBoxes: any;
   tileBox: any;
   boxLinks: any;
-  imageDiv: any;
-  imageHeight: number;  //imageHeight:  this applies to the <Image react component, not the parent div that imageDiv applies to
-
-  minWidth: number;  //min width of a tile box
-  maxWidth: number;  //max width of a tile box
+  
+  boxImageDiv: any;
+  boxMinWidth: number;  //min width of a tile box
+  boxMaxWidth: number;  //min width of a tile box
+  boxImageHeight: number;  //height of actual image.  Width = 100%
 
   setImgFit?: IImageFit;
   setImgCover?: IImageCover;
